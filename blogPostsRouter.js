@@ -6,8 +6,8 @@ const jsonParser = bodyParser.json();
 
 const {BlogPosts} = require('./models');
 
-BlogPosts.create('Beach Day', 'My day at the beach was so flippin fun!', 'Lauren Morrow');
-BlogPosts.create('Dunes Day','My day at the dunes was so fartin fantastic!','Lauren Morrow');
+BlogPosts.create('Beach Day', 'My day at the beach was so flippin fun!', 'Lauren Morrow', new Date());
+BlogPosts.create('Dunes Day','My day at the dunes was so fartin fantastic!','Lauren Morrow', new Date());
 // title, content, an author name, and (optionally) a publication date
 
 router.get('/', (req, res) => {
@@ -24,7 +24,7 @@ router.post('/', jsonParser, (req, res) => {
 			return res.status(400).send(message);
 		}
 	}
-	const item = BlogPosts.create(req.body.title, req.body.content, req.body.author, req.body.publishDate);
+	const item = BlogPosts.create(req.body.title, req.body.content, req.body.author, new Date());
 	res.status(201).json(item);
 });
 
@@ -35,7 +35,7 @@ router.delete('/:id', (req, res) => {
 });
 
 router.put('/:id', jsonParser, (req, res) => {
-	const requiredFields = ['title','content','author'];
+	const requiredFields = ['id', 'title','content','author'];
 	for (let i = 0; i < requiredFields.length; i++) {
 		const field = requiredFields[i];
 		if (!(field in req.body)) {
@@ -55,7 +55,7 @@ router.put('/:id', jsonParser, (req, res) => {
 		title: req.body.title,
 		content: req.body.content,
 		author: req.body.author,
-		publishDate: req.body.publishDate || Date.now()
+		publishDate: req.body.publishDate || new Date()
 	});
 	res.status(204).end();
 });
