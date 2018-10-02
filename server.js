@@ -6,7 +6,7 @@ const app = express();
 const blogPostsRouter = require('./blogPostsRouter');
 
 app.use(morgan('common'));
-app.use(express.static('public'));
+app.use(express.json());
 
 // app.get('/', (req, res) => {
 // res.sendFile(__dirname + '/views/server.js');
