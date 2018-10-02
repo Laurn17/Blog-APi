@@ -37,7 +37,8 @@ describe("Blog", function() {
 	// ADD A NEW BLOG
 	it("should add a new blog entry on POST", function() {
 		const newEntry = {title: "My new blog", content: "today was my first day of blogging!", author: "Lauren Morrow"};
-		
+		const expectedKeys = ["id", "title", "content", "author"];
+
 		return chai
 		.request(app)
 		.post("/blog-posts")
@@ -46,14 +47,14 @@ describe("Blog", function() {
 			expect(res).to.have.status(200);
 			expect(res).to.be.json;
 			expect(res.body).to.be.a("object");
-			expect(res.body).to.include.keys("id", "title", "content", "author");
+			expect(res.body).to.include.keys(expectedKeys);
 			expect(res.body.title).to.equal(newEntry.title);
 			expect(res.body.content).to.equal(newEntry.content);
 			expect(res.body.author).to.equal(newEntry.author);
 			expect(res.body.id).to.not.equal(null);
-			expect(res.body).to.deep.equal(
-				Object.assign(newEntry, {id: res.body.id})
-			);
+			// expect(res.body).to.deep.equal(
+			// 	Object.assign(newEntry, {id: res.body.id})
+			// );
 		});
 	});
 
@@ -70,26 +71,26 @@ describe("Blog", function() {
 
 	// UPDATE A BLOG
 	it("should update a blog entry on PUT", function() {
-		const updateEntry = {
+		return ( chai
+		.request(app)
+		.get("/blog-posts")
+		.then(function(res) {
+			const updateEntry = {
 			title: "Bad Day",
 			content: "Today was a bad day",
 			author: "Lauren Morrow"
 		};
-
-		return chai
-		.request(app)
-		.get("/blog-posts")
-		.then(function(res) {
 			updateEntry.id = res.body[0].id;
 
 			return chai
 			.request(app)
 			.put(`/blog-posts/${updateEntry.id}`)
 			.send(updateEntry);
-		});
-		.then(function(res) {
+			.then(function(res) {
 			expect(res).to.have.status(204);
+			});
 		});
+		);
 	});
 
 	// DELETE A BLOG
@@ -101,9 +102,9 @@ describe("Blog", function() {
 			return chai
 			.request(app)
 			.delete(`/blog-posts/${res.body[0].id}`);
-		});
-		.then(function(res) {
+			.then(function(res) {
 			expect(res).to.have.status(204);
+			});
 		});
 	});
 	
