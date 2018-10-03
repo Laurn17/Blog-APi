@@ -44,7 +44,7 @@ describe("Blog", function() {
 		.post("/blog-posts")
 		.send(newEntry)
 		.then(function(res) {
-			expect(res).to.have.status(200);
+			expect(res).to.have.status(201);
 			expect(res).to.be.json;
 			expect(res.body).to.be.a("object");
 			expect(res.body).to.include.keys(expectedKeys);
@@ -85,11 +85,11 @@ describe("Blog", function() {
 			return chai
 			.request(app)
 			.put(`/blog-posts/${updateEntry.id}`)
-			.send(updateEntry);
+			.send(updateEntry)
 			.then(function(res) {
 			expect(res).to.have.status(204);
 			});
-		});
+		})
 		);
 	});
 
@@ -101,7 +101,7 @@ describe("Blog", function() {
 		.then(function(res) {
 			return chai
 			.request(app)
-			.delete(`/blog-posts/${res.body[0].id}`);
+			.delete(`/blog-posts/${res.body[0].id}`)
 			.then(function(res) {
 			expect(res).to.have.status(204);
 			});
